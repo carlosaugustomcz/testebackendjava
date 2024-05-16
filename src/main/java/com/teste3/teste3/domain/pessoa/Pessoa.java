@@ -8,13 +8,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity(name="pessoas")
-@Table(name="pessoas")
+@Entity
+@Table
 @Getter
 @Setter
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +24,17 @@ public class Pessoa {
     private String nomeCompleto;
     private LocalDate dataNascimento;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    private Endereco endereco;
+    @OneToMany
+    @JoinColumn(name = "pessoa_id")
+    private List<Endereco> endereco = new ArrayList<>();
+
+    public Pessoa(){}
+
+    public Pessoa(String nomeCompleto, LocalDate dataNascimento){
+        this.nomeCompleto = nomeCompleto;
+        this.dataNascimento = dataNascimento;
+
+    }
 
 
 }
